@@ -1,3 +1,5 @@
+### Screenshots are found in the Issues tab.
+
 # VBA Homework - The VBA of Wall Street
 
 ## Background
