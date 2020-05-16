@@ -1,0 +1,69 @@
+Sub info():
+      
+
+    For Each ws In Worksheets
+    
+    
+        ' Column labels
+        ws.Range("I1").Value = "Ticker"
+        ws.Range("J1").Value = "Yearly Change"
+        ws.Range("K1").Value = "Percent Change"
+        ws.Range("L1").Value = "Total Stock Volume"
+     
+        LastRow = Sheets("A").Cells(Rows.Count, "A").End(xlUp).Row - 1
+        ' MsgBox (lastRow)
+        
+        Dim ticker As String
+        Dim yearly_change As Double
+        Dim Summary_Ticker_Row As Integer
+            
+        Dim yearly_change_open As Double
+        Dim yearly_change_close As Double
+            
+        Dim percentage_change As Double
+        Dim Total_Stock_Volume As Double
+            
+        Dim PreviousAmount As Long
+        
+        
+        For i = 1 To LastRow
+            If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+            
+            ' Populating our tickers
+                ticker = Cells(i + 1, 1).Value
+                
+                ws.Range("I" & Summary_Table_Row).Value = ticker
+                
+                Summary_Table_Row = Summary_Table_Row + 1
+                
+            ' Setting our variables for calculating yearly change and total stock volume.
+                yearly_change_open = 0
+                yearly_change_close = 0
+                yearly_change = 0
+                percentage_change = 0
+                Total_Stock_Volume = 0
+                
+            ElseIf Cells(i + 1, 1).Value = Cells(i, 1).Value Then
+                yearly_change_open = Cells(i, 3).Value + yearly_change_open
+                yearly_change_close = Cells(i, 6).Value + yearly_change_close
+                yearly_change = yearly_change_open - yearly_change_close
+                
+                ws.Range("J" & Summary_Table_Row - 1).Value = yearly_change
+                
+                percentage_change = yearly_change / yearly_change_open
+                ws.Range("K" & Summary_Table_Row).NumberFormat = "0.00%"
+                ws.Range("K" & Summary_Table_Row - 1).Value = percentage_change
+                
+                Total_Stock_Volume = Cells(i, 7).Value + Total_Stock_Volume
+                ws.Range("L" & Summary_Table_Row - 1).Value = Total_Stock_Volume
+                
+                If ws.Range("J" & Summary_Table_Row).Value >= 0 Then
+                    ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 4
+                    
+                Else
+                    ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 3
+                End If
+            End If
+        Next i
+    Next ws
+End Sub
